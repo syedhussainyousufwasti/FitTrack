@@ -1,0 +1,59 @@
+<div class="auth-wrap">
+  <div class="auth-left">
+    <div>
+      <div class="logo-text">FIT<br>TRACK</div>
+      <p>Train Smarter. Live Better.</p>
+      <div class="auth-stats">
+        <div class="auth-stat">
+          <div class="num">100+</div>
+          <div class="lbl">Exercises</div>
+        </div>
+        <div class="auth-stat">
+          <div class="num">∞</div>
+          <div class="lbl">Goals</div>
+        </div>
+        <div class="auth-stat">
+          <div class="num">24/7</div>
+          <div class="lbl">Tracking</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-right">
+    <div class="auth-form-box">
+      <h2>WELCOME BACK</h2>
+      <p class="sub">Log in to your FitTrack account</p>
+
+      <!-- Error message -->
+      <div class="alert-error" ng-if="error">
+        <i class="fas fa-circle-xmark"></i> {{error}}
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email"
+               ng-model="user.email"
+               placeholder="you@gmail.com">
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password"
+               ng-model="user.password"
+               placeholder="••••••••">
+      </div>
+
+      <button class="btn-primary"
+              ng-click="login()"
+              ng-disabled="loading">
+        {{loading ? 'LOGGING IN...' : 'LOGIN'}}
+      </button>
+
+      <div class="auth-switch">
+        New here?
+        <a href="#!/register">Create an account</a>
+      </div>
+    </div>
+  </div>
+</div>

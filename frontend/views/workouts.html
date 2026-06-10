@@ -1,0 +1,89 @@
+<div class="app-layout">
+  <div class="sidebar">
+    <div class="sidebar-logo"><span>FITTRACK</span><small>Performance Hub</small></div>
+    <nav class="sidebar-nav">
+      <div class="nav-label">Main</div>
+      <a class="nav-item" ng-click="goto('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</a>
+      <a class="nav-item active" ng-click="goto('workouts')"><i class="fas fa-dumbbell"></i> Workouts</a>
+      <a class="nav-item" ng-click="goto('goals')"><i class="fas fa-bullseye"></i> Goals</a>
+      <div class="nav-label">Tools</div>
+      <a class="nav-item" ng-click="goto('bmi')"><i class="fas fa-weight-scale"></i> BMI Calculator</a>
+      <a class="nav-item" ng-click="goto('profile')"><i class="fas fa-user"></i> Profile</a>
+    </nav>
+    <div class="sidebar-user">
+      <div class="user-pill">
+        <div class="user-avatar">{{userName[0]}}</div>
+        <div class="user-info"><div class="uname">{{userName}}</div><div class="urole">Athlete</div></div>
+        <button class="btn-logout" ng-click="logout()"><i class="fas fa-right-from-bracket"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="page-header" style="display:flex;align-items:flex-end;justify-content:space-between">
+      <div><h1>WORKOUTS</h1><p>Log and track every session</p></div>
+      <button class="btn btn-accent" ng-click="toggleForm()">
+        <i class="fas" ng-class="showForm ? 'fa-times' : 'fa-plus'"></i> {{showForm ? 'Cancel' : 'Log Workout'}}
+      </button>
+    </div>
+
+    <div class="card mb-24" ng-if="showForm">
+      <div class="card-header"><h3>NEW WORKOUT</h3></div>
+      <div class="workout-form">
+        <div class="form-group"><label>Exercise Name *</label><input type="text" ng-model="workout.exercise" placeholder="e.g. Bench Press"></div>
+        <div class="form-group"><label>Muscle Group</label>
+          <select ng-model="workout.muscleGroup">
+            <option value="">— Select —</option>
+            <option ng-repeat="g in muscleGroups" value="{{g}}">{{g}}</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Sets</label><input type="number" ng-model="workout.sets" placeholder="3" min="1"></div>
+        <div class="form-group"><label>Reps</label><input type="number" ng-model="workout.reps" placeholder="10" min="1"></div>
+        <div class="form-group"><label>Weight (kg)</label><input type="number" ng-model="workout.weight" placeholder="60" min="0"></div>
+        <div class="form-group"><label>&nbsp;</label><button class="btn btn-accent" ng-click="addWorkout()" style="width:100%"><i class="fas fa-check"></i> Save</button></div>
+      </div>
+      <div class="form-group" style="margin-top:12px">
+        <label>Notes (optional)</label>
+        <input type="text" ng-model="workout.notes" placeholder="e.g. Felt strong today">
+      </div>
+    </div>
+
+    <div class="card mb-24" style="padding:18px 24px">
+      <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+        <div style="flex:1;min-width:200px">
+          <input type="text" ng-model="search" placeholder="🔍  Search exercises..." style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:11px 16px;color:var(--text);font-size:14px;width:100%;outline:none">
+        </div>
+        <select ng-model="filterType" style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:11px 16px;color:var(--text);font-size:14px;outline:none;cursor:pointer">
+          <option value="">All Muscle Groups</option>
+          <option ng-repeat="g in muscleGroups" value="{{g}}">{{g}}</option>
+        </select>
+        <span style="color:var(--muted);font-size:13px;font-family:var(--font-mono)">{{filtered().length}} results</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="empty-state" ng-if="filtered().length === 0"><i class="fas fa-dumbbell"></i><p>No workouts found. Log your first one!</p></div>
+      <div class="table-wrap" ng-if="filtered().length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>Exercise</th><th>Muscle Group</th><th>Sets</th><th>Reps</th><th>Weight</th><th>Notes</th><th>Date</th><th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="w in filtered()">
+              <td style="font-weight:600">{{w.exercise}}</td>
+              <td><span class="badge" ng-class="categoryClass(w.muscleGroup)">{{w.muscleGroup || '—'}}</span></td>
+              <td class="mono">{{w.sets || '—'}}</td>
+              <td class="mono">{{w.reps || '—'}}</td>
+              <td class="mono">{{w.weight ? w.weight + ' kg' : '—'}}</td>
+              <td style="color:var(--muted);font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{w.notes || '—'}}</td>
+              <td style="color:var(--muted);font-size:13px">{{w.date | date:'MMM d, y'}}</td>
+              <td><button class="btn btn-danger btn-sm" ng-click="deleteWorkout(w._id)"><i class="fas fa-trash"></i></button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

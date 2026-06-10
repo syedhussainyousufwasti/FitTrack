@@ -1,0 +1,132 @@
+<div class="auth-wrap">
+  <div class="auth-left">
+    <div>
+      <div class="logo-text">FIT<br>TRACK</div>
+      <p>Your fitness journey starts here.</p>
+      <div class="auth-stats">
+        <div class="auth-stat">
+          <div class="num">Free</div>
+          <div class="lbl">Forever</div>
+        </div>
+        <div class="auth-stat">
+          <div class="num">BMI</div>
+          <div class="lbl">Calculator</div>
+        </div>
+        <div class="auth-stat">
+          <div class="num">Goals</div>
+          <div class="lbl">Tracker</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-right">
+    <div class="auth-form-box">
+
+      <!-- STEP 1 REGISTER FORM — hidden after code sent -->
+      <div ng-show="!codeSent">
+        <h2>CREATE ACCOUNT</h2>
+        <p class="sub">Start tracking your fitness today</p>
+
+        <div class="alert-error" ng-if="error">
+          <i class="fas fa-circle-xmark"></i> {{error}}
+        </div>
+
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text"
+                 ng-model="user.name"
+                 placeholder="John Doe">
+        </div>
+
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email"
+                 ng-model="user.email"
+                 placeholder="you@gmail.com">
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password"
+                 ng-model="user.password"
+                 placeholder="Min. 6 characters">
+        </div>
+
+        <button class="btn-primary"
+                ng-click="register()"
+                ng-disabled="loading">
+          {{loading ? 'SENDING CODE...' : 'SEND VERIFICATION CODE'}}
+        </button>
+
+        <div class="auth-switch">
+          Already have an account?
+          <a href="#!/login">Log in</a>
+        </div>
+      </div>
+
+
+      <!-- STEP 2 VERIFY CODE FORM — shown after code sent -->
+      <div ng-show="codeSent">
+        <h2>VERIFY EMAIL</h2>
+        <p class="sub">
+          We sent a 6-digit code to
+          <strong style="color:var(--accent)">{{savedEmail}}</strong>
+        </p>
+
+        <div class="alert-error" ng-if="error">
+          <i class="fas fa-circle-xmark"></i> {{error}}
+        </div>
+
+        <div ng-if="success"
+             style="background:rgba(71,255,150,0.1);
+                    border:1px solid rgba(71,255,150,0.3);
+                    border-radius:var(--radius);
+                    padding:12px 16px;
+                    color:#47ff96;
+                    font-size:14px;
+                    margin-bottom:16px;
+                    display:flex;
+                    align-items:center;
+                    gap:8px;">
+          <i class="fas fa-circle-check"></i> {{success}}
+        </div>
+
+        <div class="form-group">
+          <label>Enter Verification Code</label>
+          <input type="text"
+                 ng-model="verifyCode"
+                 placeholder="000000"
+                 maxlength="6"
+                 style="font-size:32px;
+                        letter-spacing:12px;
+                        text-align:center;
+                        font-family:var(--font-mono);
+                        padding:20px;">
+        </div>
+
+        <button class="btn-primary"
+                ng-click="verify()"
+                ng-disabled="loading">
+          {{loading ? 'VERIFYING...' : 'VERIFY & ACTIVATE'}}
+        </button>
+
+        <div class="auth-switch" style="margin-top:16px">
+          Didn't receive the code?
+          <a ng-click="resend()"
+             style="cursor:pointer;color:var(--accent)">
+            Resend Code
+          </a>
+        </div>
+
+        <div class="auth-switch" style="margin-top:8px">
+          <a ng-click="codeSent = false; error = ''"
+             style="cursor:pointer;color:var(--muted)">
+            <i class="fas fa-arrow-left"></i> Go Back
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

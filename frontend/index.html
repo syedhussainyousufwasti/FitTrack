@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app="fittrackApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitTrack</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div ng-view></div>
+
+  <!-- Load AngularJS first -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
+
+  <!-- Load Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Load app.js first — defines the app and API variable -->
+  <script src="app.js"></script>
+
+  <!-- Load controllers after app.js -->
+  <script src="controllers/authCtrl.js"></script>
+  <script src="controllers/dashCtrl.js"></script>
+  <script src="controllers/workoutCtrl.js"></script>
+  <script src="controllers/goalCtrl.js"></script>
+
+</body>
+</html>

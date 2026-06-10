@@ -1,0 +1,12 @@
+# Node modules — never push these
+node_modules/
+
+# Environment variables — never push secrets
+.env
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
