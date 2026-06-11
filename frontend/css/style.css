@@ -185,8 +185,7 @@ body {
 
 /* APP LAYOUT */
 .app-layout {
-  display: grid;
-  grid-template-columns: 260px 1fr;
+  display: block;
   min-height: 100vh;
 }
 
@@ -646,3 +645,23 @@ tbody td { padding: 14px 16px; }
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--muted2); border-radius: 3px; }
+
+/* RESPONSIVE */
+@media (max-width: 1200px) {
+  .stats-row  { grid-template-columns: repeat(2, 1fr); }
+  .grid-2     { grid-template-columns: 1fr; }
+  .goals-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .stats-row    { grid-template-columns: 1fr; }
+  .goals-grid   { grid-template-columns: 1fr; }
+  .main-content { padding: 24px 20px; }
+  .page-header h1 { font-size: 38px; }
+  .workout-form { grid-template-columns: 1fr 1fr; }
+}
+
+/* Scroll lock when modal open */
+body.modal-open {
+  overflow: hidden;
+}

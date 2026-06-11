@@ -1,16 +1,44 @@
 <!DOCTYPE html>
 <html ng-app="fittrackApp">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FitTrack</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
+
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+
 </head>
+
 <body>
 
   <div ng-view></div>
+
+  <!-- LOGOUT MODAL -->
+  <div class="modal-overlay" ng-if="showLogoutModal" style="z-index:9999;overflow:hidden" ng-click="cancelLogout()">
+    <div class="modal-box" style="max-width:380px;text-align:center" ng-click="$event.stopPropagation()">
+      <div
+        style="width:64px;height:64px;border-radius:50%;background:rgba(255,79,71,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 20px">
+        <i class="fas fa-right-from-bracket" style="font-size:28px;color:#ff4f47"></i>
+      </div>
+      <h3 style="font-size:24px;margin-bottom:8px">Logout?</h3>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:28px">Are you sure you want to logout of FitTrack?</p>
+      <div style="display:flex;gap:12px">
+        <button class="btn btn-ghost" style="flex:1" ng-click="cancelLogout()">Cancel</button>
+        <button class="btn btn-danger" style="flex:1;justify-content:center" ng-click="confirmLogout()">
+          <i class="fas fa-right-from-bracket"></i> Logout
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Load AngularJS first -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
@@ -29,4 +57,5 @@
   <script src="controllers/goalCtrl.js"></script>
 
 </body>
+
 </html>

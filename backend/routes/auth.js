@@ -153,4 +153,24 @@ router.post('/resend', async (req, res) => {
   }
 });
 
+// UPDATE NAME
+router.put('/update/:id', async (req, res) => {
+  try {
+    const { name } = req.body;
+    if (!name) return res.status(400).json({ message: 'Name required' });
+
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { name: name },
+      { new: true }
+    );
+
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.json({ message: 'Name updated!', name: user.name });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;

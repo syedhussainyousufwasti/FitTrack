@@ -1,141 +1,95 @@
-<div class="auth-wrap">
-  <div class="auth-left">
-    <div>
-      <div class="logo-text">FIT<br>TRACK</div>
-      <p>Your fitness journey starts here.</p>
-      <div class="auth-stats">
-        <div class="auth-stat">
-          <div class="num">Free</div>
-          <div class="lbl">Forever</div>
-        </div>
-        <div class="auth-stat">
-          <div class="num">BMI</div>
-          <div class="lbl">Calculator</div>
-        </div>
-        <div class="auth-stat">
-          <div class="num">Goals</div>
-          <div class="lbl">Tracker</div>
-        </div>
+<div class="app-layout">
+  <div class="sidebar">
+    <div class="sidebar-logo"><span>FITTRACK</span><small>Performance Hub</small></div>
+    <nav class="sidebar-nav">
+      <div class="nav-label">Main</div>
+      <a class="nav-item active" ng-click="goto('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</a>
+      <a class="nav-item" ng-click="goto('workouts')"><i class="fas fa-dumbbell"></i> Workouts</a>
+      <a class="nav-item" ng-click="goto('goals')"><i class="fas fa-bullseye"></i> Goals</a>
+      <div class="nav-label">Tools</div>
+      <a class="nav-item" ng-click="goto('bmi')"><i class="fas fa-weight-scale"></i> BMI Calculator</a>
+      <a class="nav-item" ng-click="goto('profile')"><i class="fas fa-user"></i> Profile</a>
+    </nav>
+    <div class="sidebar-user">
+      <div class="user-pill">
+        <div class="user-avatar">{{userName[0]}}</div>
+        <div class="user-info"><div class="uname">{{userName}}</div><div class="urole">Athlete</div></div>
+        <button class="btn-logout" ng-click="logout()"><i class="fas fa-right-from-bracket"></i></button>
       </div>
     </div>
   </div>
 
-  <div class="auth-right">
-    <div class="auth-form-box">
+  <div class="main-content">
+    <div class="page-header">
+      <h1>DASHBOARD</h1>
+      <p>Welcome back, {{userName}}. Here's your summary.</p>
+    </div>
 
-      <!-- ================================
-           STEP 1 — REGISTER FORM
-           shown when codeSent is false
-           ================================ -->
-      <div ng-if="!codeSent">
-        <h2>CREATE ACCOUNT</h2>
-        <p class="sub">Start tracking your fitness today</p>
+    <div class="stats-row">
+      <div class="stat-card c1">
+        <div class="stat-icon"><i class="fas fa-dumbbell"></i></div>
+        <div class="stat-num">{{totalWorkouts}}</div>
+        <div class="stat-label">Total Workouts</div>
+      </div>
+      <div class="stat-card c2">
+        <div class="stat-icon"><i class="fas fa-fire"></i></div>
+        <div class="stat-num">{{weekWorkouts}}</div>
+        <div class="stat-label">This Week</div>
+      </div>
+      <div class="stat-card c3">
+        <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
+        <div class="stat-num">{{totalGoals}}</div>
+        <div class="stat-label">Active Goals</div>
+      </div>
+      <div class="stat-card c4">
+        <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+        <div class="stat-num">{{goalsAchieved}}</div>
+        <div class="stat-label">Goals Achieved</div>
+      </div>
+    </div>
 
-        <!-- Error message -->
-        <div class="alert-error" ng-if="error">
-          <i class="fas fa-circle-xmark"></i> {{error}}
+    <div class="grid-2 mb-24">
+      <div class="card">
+        <div class="card-header">
+          <h3>WEEKLY ACTIVITY</h3>
+          <span style="color:var(--muted);font-size:12px">Last 7 Days</span>
         </div>
-
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text"
-                 ng-model="user.name"
-                 placeholder="John Doe">
-        </div>
-
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email"
-                 ng-model="user.email"
-                 placeholder="you@gmail.com">
-        </div>
-
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password"
-                 ng-model="user.password"
-                 placeholder="Min. 6 characters">
-        </div>
-
-        <button class="btn-primary"
-                ng-click="register()"
-                ng-disabled="loading">
-          {{loading ? 'SENDING CODE...' : 'SEND VERIFICATION CODE'}}
-        </button>
-
-        <div class="auth-switch">
-          Already have an account?
-          <a href="#!/login">Log in</a>
+        <div class="chart-wrap">
+          <canvas id="weekChart"></canvas>
         </div>
       </div>
 
-
-      <!-- ================================
-           STEP 2 — VERIFY CODE FORM
-           shown when codeSent is true
-           ================================ -->
-      <div ng-if="codeSent">
-        <h2>VERIFY EMAIL</h2>
-        <p class="sub">
-          We sent a 6-digit code to
-          <strong style="color:var(--accent)">{{user.email}}</strong>
-        </p>
-
-        <!-- Error message -->
-        <div class="alert-error" ng-if="error">
-          <i class="fas fa-circle-xmark"></i> {{error}}
+      <div class="card">
+        <div class="card-header">
+          <h3>RECENT WORKOUTS</h3>
+          <a class="btn btn-ghost btn-sm" ng-click="goto('workouts')">View All</a>
         </div>
-
-        <!-- Success message -->
-        <div ng-if="success"
-             style="background:rgba(71,255,150,0.1);
-                    border:1px solid rgba(71,255,150,0.3);
-                    border-radius:var(--radius);
-                    padding:12px 16px;
-                    color:#47ff96;
-                    font-size:14px;
-                    margin-bottom:16px;
-                    display:flex;
-                    align-items:center;
-                    gap:8px;">
-          <i class="fas fa-circle-check"></i> {{success}}
+        <div class="empty-state" ng-if="recentWorkouts.length === 0">
+          <i class="fas fa-dumbbell"></i>
+          <p>No workouts logged yet</p>
         </div>
-
-        <div class="form-group">
-          <label>Enter Verification Code</label>
-          <input type="text"
-                 ng-model="verifyCode"
-                 placeholder="000000"
-                 maxlength="6"
-                 style="font-size:32px;
-                        letter-spacing:12px;
-                        text-align:center;
-                        font-family:var(--font-mono);
-                        padding:20px;">
-        </div>
-
-        <button class="btn-primary"
-                ng-click="verify()"
-                ng-disabled="loading">
-          {{loading ? 'VERIFYING...' : 'VERIFY & ACTIVATE'}}
-        </button>
-
-        <div class="auth-switch" style="margin-top:16px">
-          Didn't receive the code?
-          <a ng-click="resend()"
-             style="cursor:pointer;color:var(--accent)">
-            Resend Code
-          </a>
-        </div>
-
-        <div class="auth-switch" style="margin-top:8px">
-          <a ng-click="codeSent = false; error = ''"
-             style="cursor:pointer;color:var(--muted)">
-            <i class="fas fa-arrow-left"></i> Go Back
-          </a>
+        <div ng-repeat="w in recentWorkouts"
+             style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)">
+          <div>
+            <div style="font-weight:600;font-size:14px">{{w.exercise}}</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:3px">{{w.date | date:'MMM d, y'}}</div>
+          </div>
+          <div>
+            <span class="badge badge-yellow" ng-if="w.sets">{{w.sets}}x{{w.reps}}</span>
+            <span class="badge badge-blue" ng-if="w.weight" style="margin-left:6px">{{w.weight}}kg</span>
+          </div>
         </div>
       </div>
+    </div>
 
+    <div class="card">
+      <div class="card-header"><h3>QUICK ACTIONS</h3></div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <button class="btn btn-accent" ng-click="goto('workouts')"><i class="fas fa-plus"></i> Log Workout</button>
+        <button class="btn btn-ghost"  ng-click="goto('goals')"><i class="fas fa-bullseye"></i> Set Goal</button>
+        <button class="btn btn-ghost"  ng-click="goto('bmi')"><i class="fas fa-weight-scale"></i> Check BMI</button>
+        <button class="btn btn-ghost"  ng-click="goto('profile')"><i class="fas fa-user"></i> View Profile</button>
+      </div>
     </div>
   </div>
 </div>

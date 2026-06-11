@@ -32,6 +32,7 @@ mongoose.connect(process.env.MONGO_URI)
 app.use('/api/auth',     require('./routes/auth'));
 app.use('/api/workouts', require('./routes/workouts'));
 app.use('/api/goals',    require('./routes/goals'));
+app.use('/api/bmi', require('./routes/bmi'));
 
 app.get('/', (req, res) => {
   res.json({ message: 'FitTrack API is running' });

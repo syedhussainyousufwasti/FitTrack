@@ -14,51 +14,120 @@
       <div class="user-pill">
         <div class="user-avatar">{{userName[0]}}</div>
         <div class="user-info"><div class="uname">{{userName}}</div><div class="urole">Athlete</div></div>
-        <button class="btn-logout" ng-click="goto('login')"><i class="fas fa-right-from-bracket"></i></button>
+        <button class="btn-logout" ng-click="logout()"><i class="fas fa-right-from-bracket"></i></button>
       </div>
     </div>
   </div>
 
   <div class="main-content">
-    <div class="page-header"><h1>BMI CALCULATOR</h1><p>Find out your Body Mass Index</p></div>
+    <div class="page-header">
+      <h1>BMI CALCULATOR</h1>
+      <p>Find out your Body Mass Index</p>
+    </div>
 
-    <div class="grid-2">
+    <div class="grid-2 mb-24">
+
+      <!-- INPUT CARD -->
       <div class="card">
-        <div class="card-header"><h3>YOUR MEASUREMENTS</h3></div>
-        <div class="form-group"><label>Height (cm)</label><input type="number" ng-model="height" placeholder="175"></div>
-        <div class="form-group"><label>Weight (kg)</label><input type="number" ng-model="weight" placeholder="70"></div>
-        <div class="form-group"><label>Age (optional)</label><input type="number" ng-model="age" placeholder="25"></div>
-        <button class="btn btn-accent" style="width:100%;padding:16px;font-size:16px" ng-click="calcBmi()">
-          <i class="fas fa-calculator"></i> CALCULATE BMI
-        </button>
+        <div class="card-header">
+          <h3>YOUR MEASUREMENTS</h3>
+          <span ng-if="savedBMI && !editMode" style="color:var(--accent);font-size:12px">
+            <i class="fas fa-circle-check"></i> Saved
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label>HEIGHT (CM)</label>
+          <input type="number" ng-model="height" placeholder="175"
+                 ng-disabled="savedBMI && !editMode">
+        </div>
+        <div class="form-group">
+          <label>WEIGHT (KG)</label>
+          <input type="number" ng-model="weight" placeholder="70"
+                 ng-disabled="savedBMI && !editMode">
+        </div>
+        <div class="form-group">
+          <label>AGE (OPTIONAL)</label>
+          <input type="number" ng-model="age" placeholder="25"
+                 ng-disabled="savedBMI && !editMode">
+        </div>
+
+        <!-- Buttons: No saved BMI -->
+        <div ng-if="!savedBMI" style="display:flex;gap:12px;margin-top:8px">
+          <button class="btn btn-accent" style="flex:1" ng-click="calcBmi()">
+            <i class="fas fa-calculator"></i> Calculate
+          </button>
+          <button class="btn btn-ghost" style="flex:1" ng-click="saveBMI()"
+                  ng-disabled="!bmi">
+            <i class="fas fa-floppy-disk"></i> Save
+          </button>
+        </div>
+
+        <!-- Buttons: Saved, not editing -->
+        <div ng-if="savedBMI && !editMode" style="display:flex;gap:12px;margin-top:8px">
+          <button class="btn btn-ghost" style="flex:1" ng-click="enableEdit()">
+            <i class="fas fa-pen"></i> Edit
+          </button>
+        </div>
+
+        <!-- Buttons: Edit mode -->
+        <div ng-if="savedBMI && editMode" style="display:flex;gap:12px;margin-top:8px">
+          <button class="btn btn-accent" style="flex:1" ng-click="calcBmi()">
+            <i class="fas fa-calculator"></i> Recalculate
+          </button>
+          <button class="btn btn-ghost" style="flex:1" ng-click="updateBMI()"
+                  ng-disabled="!bmi">
+            <i class="fas fa-floppy-disk"></i> Update
+          </button>
+          <button class="btn btn-danger" ng-click="cancelEdit()">
+            <i class="fas fa-xmark"></i>
+          </button>
+        </div>
       </div>
 
+      <!-- RESULT CARD -->
       <div class="card">
         <div class="card-header"><h3>YOUR RESULT</h3></div>
-        <div ng-if="!bmi" style="text-align:center;padding:40px;color:var(--muted)">
-          <i class="fas fa-weight-scale" style="font-size:48px;opacity:0.2;margin-bottom:16px;display:block"></i>
-          Enter your measurements to calculate
+
+        <div ng-if="!bmi" class="empty-state">
+          <i class="fas fa-weight-scale"></i>
+          <p>Enter your measurements to calculate</p>
         </div>
-        <div ng-if="bmi">
-          <div class="bmi-display">
-            <div class="bmi-num">{{bmi}}</div>
-            <div class="bmi-label">{{bmiCat}}</div>
-          </div>
-          <div class="bmi-scale">
-            <div class="under"></div><div class="normal"></div><div class="over"></div><div class="obese"></div>
+
+        <div ng-if="bmi" class="bmi-display">
+          <div class="bmi-num">{{bmi}}</div>
+          <div class="bmi-label">{{bmiCat}}</div>
+
+          <div class="bmi-scale" style="margin-top:32px">
+            <div class="under"></div>
+            <div class="normal"></div>
+            <div class="over"></div>
+            <div class="obese"></div>
           </div>
           <div class="bmi-pointer">
-            <span>Under<br>&lt;18.5</span>
-            <span>Normal<br>18.5–25</span>
-            <span>Over<br>25–30</span>
-            <span>Obese<br>&gt;30</span>
+            <span>Underweight</span>
+            <span>Normal</span>
+            <span>Overweight</span>
+            <span>Obese</span>
           </div>
-          <div style="margin-top:24px;padding:16px;background:var(--bg3);border-radius:12px;font-size:14px;color:var(--muted);line-height:1.6">
-            <strong style="color:var(--text);display:block;margin-bottom:6px">What this means:</strong>
-            <span ng-if="bmiCat === 'Underweight'">You may need to increase caloric intake. Consider consulting a nutritionist.</span>
-            <span ng-if="bmiCat === 'Normal'">Great job! Your BMI is in a healthy range. Keep up your current routine.</span>
-            <span ng-if="bmiCat === 'Overweight'">Consider increasing cardio and reducing processed foods.</span>
-            <span ng-if="bmiCat === 'Obese'">It's recommended to consult a healthcare professional for a fitness plan.</span>
+
+          <div style="margin-top:28px;display:flex;flex-direction:column;gap:10px;text-align:left">
+            <div style="display:flex;justify-content:space-between;padding:10px 16px;background:var(--bg3);border-radius:10px">
+              <span style="color:var(--muted);font-size:13px">Height</span>
+              <span style="font-weight:600">{{height}} cm</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:10px 16px;background:var(--bg3);border-radius:10px">
+              <span style="color:var(--muted);font-size:13px">Weight</span>
+              <span style="font-weight:600">{{weight}} kg</span>
+            </div>
+            <div ng-if="age" style="display:flex;justify-content:space-between;padding:10px 16px;background:var(--bg3);border-radius:10px">
+              <span style="color:var(--muted);font-size:13px">Age</span>
+              <span style="font-weight:600">{{age}} years</span>
+            </div>
+            <div ng-if="savedBMI" style="display:flex;justify-content:space-between;padding:10px 16px;background:var(--bg3);border-radius:10px">
+              <span style="color:var(--muted);font-size:13px">Last Updated</span>
+              <span style="font-weight:600;font-size:13px">{{savedBMI.updatedAt | date:'MMM d, y'}}</span>
+            </div>
           </div>
         </div>
       </div>

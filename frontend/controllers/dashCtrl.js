@@ -1,31 +1,35 @@
-app.controller('DashCtrl', function($scope, $http, $timeout) {
+app.controller('DashCtrl', function ($scope, $http, $timeout, LogoutConfirm) {
   $scope.userName = localStorage.getItem('userName');
   var userId = localStorage.getItem('userId');
 
-  $scope.goto   = function(path) { window.location.hash = '#!/' + path; };
-  $scope.logout = function() { localStorage.clear(); window.location.hash = '#!/login'; };
+  $scope.goto   = function (path) { window.location.hash = '#!/' + path; };
+  $scope.logout = function () {
+    LogoutConfirm.show(function () {
+      localStorage.clear();
+      window.location.hash = '#!/login';
+    });
+  };
 
-  $http.get(API + '/workouts/' + userId).then(function(res) {
+  $http.get(API + '/workouts/' + userId).then(function (res) {
     var all = res.data;
     $scope.totalWorkouts = all.length;
 
     var weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
-    $scope.weekWorkouts = all.filter(function(w) {
+    $scope.weekWorkouts = all.filter(function (w) {
       return new Date(w.date) > weekAgo;
     }).length;
 
     $scope.recentWorkouts = all.slice(-5).reverse();
 
-    // Build bar chart for last 7 days
-    $timeout(function() {
+    $timeout(function () {
       var days = [], counts = [];
       for (var i = 6; i >= 0; i--) {
         var d = new Date();
         d.setDate(d.getDate() - i);
         days.push(d.toLocaleDateString('en', { weekday: 'short' }));
         var ds = d.toDateString();
-        counts.push(all.filter(function(w) {
+        counts.push(all.filter(function (w) {
           return new Date(w.date).toDateString() === ds;
         }).length);
       }
@@ -58,8 +62,8 @@ app.controller('DashCtrl', function($scope, $http, $timeout) {
     }, 100);
   });
 
-  $http.get(API + '/goals/' + userId).then(function(res) {
-    $scope.totalGoals    = res.data.length;
-    $scope.goalsAchieved = res.data.filter(function(g) { return g.achieved; }).length;
+  $http.get(API + '/goals/' + userId).then(function (res) {
+    $scope.goalsAchieved = res.data.filter(function (g) { return g.achieved; }).length;
+    $scope.totalGoals    = res.data.length - $scope.goalsAchieved;
   });
 });

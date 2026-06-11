@@ -14,55 +14,77 @@
       <div class="user-pill">
         <div class="user-avatar">{{userName[0]}}</div>
         <div class="user-info"><div class="uname">{{userName}}</div><div class="urole">Athlete</div></div>
-        <button class="btn-logout" ng-click="goto('login')"><i class="fas fa-right-from-bracket"></i></button>
+        <button class="btn-logout" ng-click="logout()"><i class="fas fa-right-from-bracket"></i></button>
       </div>
     </div>
   </div>
 
   <div class="main-content">
-    <div class="page-header"><h1>PROFILE</h1><p>Your fitness identity</p></div>
+    <div class="page-header">
+      <h1>PROFILE</h1>
+      <p>Your fitness identity</p>
+    </div>
 
+    <!-- PROFILE HERO -->
     <div class="profile-hero">
       <div class="profile-avatar-lg">{{userName[0]}}</div>
-      <div class="profile-info">
-        <h2>{{userName}}</h2>
-        <p>{{userEmail}}</p>
-        <div class="profile-tags">
-          <span class="tag">🏋️ Athlete</span>
-          <span class="tag">💪 FitTrack Member</span>
-          <span class="tag" ng-if="totalWorkouts > 0">{{totalWorkouts}} Workouts Logged</span>
+
+      <div class="profile-info" style="flex:1">
+
+        <!-- Normal View -->
+        <div ng-show="!editMode">
+          <h2>{{userName | uppercase}}</h2>
+          <p>{{userEmail}}</p>
+          <div class="profile-tags">
+            <span class="tag"><i class="fas fa-trophy" style="margin-right:4px"></i> Athlete</span>
+            <span class="tag"><i class="fas fa-dumbbell" style="margin-right:4px"></i> FitTrack Member</span>
+            <span class="tag">{{totalWorkouts}} Workouts Logged</span>
+          </div>
         </div>
+
+        <!-- Edit View -->
+        <div ng-show="editMode" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <input type="text" ng-model="newName"
+            style="background:var(--bg3);border:1px solid var(--accent);border-radius:10px;padding:10px 16px;color:var(--text);font-size:16px;font-weight:600;outline:none;min-width:240px">
+          <button class="btn btn-accent" type="button" ng-click="saveName()">
+            <i class="fas fa-check"></i> Save
+          </button>
+          <button class="btn btn-ghost" type="button" ng-click="cancelEdit()">
+            <i class="fas fa-xmark"></i> Cancel
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Edit Button -->
+      <button class="btn btn-ghost" ng-show="!editMode" type="button" ng-click="enableEdit()">
+        <i class="fas fa-pen"></i> Edit Name
+      </button>
+    </div>
+
+    <!-- STATS ROW -->
+    <div class="stats-row">
+      <div class="stat-card c1">
+        <div class="stat-icon"><i class="fas fa-dumbbell"></i></div>
+        <div class="stat-num">{{totalWorkouts}}</div>
+        <div class="stat-label">Total Workouts</div>
+      </div>
+      <div class="stat-card c3">
+        <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
+        <div class="stat-num">{{totalGoals}}</div>
+        <div class="stat-label">Goals Set</div>
+      </div>
+      <div class="stat-card c2">
+        <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+        <div class="stat-num">{{achievedGoals}}</div>
+        <div class="stat-label">Goals Achieved</div>
+      </div>
+      <div class="stat-card c4">
+        <div class="stat-icon"><i class="fas fa-weight-scale"></i></div>
+        <div class="stat-num">{{avgWeight}}</div>
+        <div class="stat-label">Avg Weight (kg)</div>
       </div>
     </div>
 
-    <div class="stats-row mb-24">
-      <div class="stat-card c1"><div class="stat-icon"><i class="fas fa-dumbbell"></i></div><div class="stat-num">{{totalWorkouts || 0}}</div><div class="stat-label">Total Workouts</div></div>
-      <div class="stat-card c3"><div class="stat-icon"><i class="fas fa-bullseye"></i></div><div class="stat-num">{{totalGoals || 0}}</div><div class="stat-label">Goals Set</div></div>
-      <div class="stat-card c2"><div class="stat-icon"><i class="fas fa-trophy"></i></div><div class="stat-num">{{achievedGoals || 0}}</div><div class="stat-label">Goals Achieved</div></div>
-      <div class="stat-card c4"><div class="stat-icon"><i class="fas fa-weight-hanging"></i></div><div class="stat-num">{{avgWeight || 0}}</div><div class="stat-label">Avg Weight (kg)</div></div>
-    </div>
-
-    <div class="card">
-      <div class="card-header"><h3>FITNESS LEVEL</h3></div>
-      <div style="display:flex;align-items:center;gap:24px">
-        <div style="font-size:64px;line-height:1">
-          {{totalWorkouts >= 50 ? '🔥' : totalWorkouts >= 20 ? '⚡' : totalWorkouts >= 5 ? '💪' : '🌱'}}
-        </div>
-        <div>
-          <div style="font-family:var(--font-disp);font-size:28px">
-            {{totalWorkouts >= 50 ? 'BEAST MODE' : totalWorkouts >= 20 ? 'INTERMEDIATE' : totalWorkouts >= 5 ? 'BEGINNER' : 'ROOKIE'}}
-          </div>
-          <div style="color:var(--muted);font-size:14px;margin-top:6px">
-            {{totalWorkouts >= 50 ? 'You are crushing it! Top tier athlete.' :
-              totalWorkouts >= 20 ? 'Great progress! Keep pushing.' :
-              totalWorkouts >= 5  ? 'Good start! Consistency is key.' : 'Log 5 workouts to level up!'}}
-          </div>
-          <div class="progress-bar-wrap" style="margin-top:16px;max-width:300px">
-            <div class="progress-bar-fill" ng-style="{'width': (totalWorkouts >= 50 ? 100 : (totalWorkouts / 50 * 100)) + '%'}"></div>
-          </div>
-          <div style="font-size:12px;color:var(--muted);margin-top:6px;font-family:var(--font-mono)">{{totalWorkouts}}/50 workouts to Beast Mode</div>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
