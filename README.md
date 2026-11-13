@@ -27,6 +27,9 @@ A full-stack fitness tracking web app built with the MEAN stack (AngularJS, Node
    ```
 4. Serve the `frontend` folder with any static server and open it in your browser.
 
+## My Contribution (Syed Hussain)
+Worked on the frontend and helped with the UI of the application.
+
 ## Contributors
 - [moin-ariff](https://github.com/moin-ariff)
 - [manaal164](https://github.com/manaal164)
